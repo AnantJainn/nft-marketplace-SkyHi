@@ -38,17 +38,17 @@ class WalletPage extends GetView<WalletController> {
                     children: [
                       SvgPicture.asset(
                         AppAssets.lightWordmark,
-                        width: AppDimensions.heading1TextSize * 3,
+                        width: AppDimensions.heading1TextSize * 3 * 1.5,
                       ),
                       AppDimensions.wSizedBox2,
-                      Text(
-                        AppStrings.subtitle,
-                        style: AppTextStyles.h4().copyWith(
-                          fontFamily: AppTextStyles.gilroyBold,
-                          foreground: Paint()
-                            ..shader = AppColors.purpleGradient,
-                        ),
-                      ),
+                      // Text(
+                      //   AppStrings.subtitle,
+                      //   style: AppTextStyles.h4().copyWith(
+                      //     fontFamily: AppTextStyles.gilroyBold,
+                      //     foreground: Paint()
+                      //       ..shader = AppColors.purpleGradient,
+                      //   ),
+                      // ),
                     ],
                   ),
                   AppDimensions.hSizedBox2,
