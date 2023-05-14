@@ -43,6 +43,8 @@ dependencies:
   sliding_switch: ^1.1.0
   slide_to_confirm: ^1.1.0
   flutter_native_splash: ^2.2.9
+  # http: ^0.13.3
+  flutter_image_compress: ^1.1.0
   # animation
   lottie: ^1.4.3
   animate_icons: ^2.0.0
@@ -58,6 +60,12 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  flutter_polyline_points: ^1.0.0
+  google_maps_flutter: ^2.1.7
+  location: ^4.4.0
+  flutter_swiper: ^1.1.6
+  carousel_slider: ^4.0.0
+  # flutter_svg: ^1.1.0
 
   camera: ^0.10.0+1
   video_player: ^2.4.7
@@ -101,6 +109,8 @@ flutter:
     - assets/fonts/
     - assets/images/
     - assets/abi/
+    - assets/map_style.json
+    - assets/dark_map_style.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

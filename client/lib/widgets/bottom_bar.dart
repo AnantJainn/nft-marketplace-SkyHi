@@ -42,19 +42,19 @@ class BottomBar extends GetView<MainScreenController> {
               title: 'Discover ',
               context: context,
             ),
-            buildTabItem(
-              index: 1,
-              icon: Icon(Iconsax.search_normal_1),
-              title: 'Search',
-              context: context,
-            ),
-            placeholder,
-            buildTabItem(
-              index: 2,
-              icon: Icon(Iconsax.heart),
-              title: 'Favorite',
-              context: context,
-            ),
+            // buildTabItem(
+            //   index: 1,
+            //   icon: Icon(Iconsax.search_normal_1),
+            //   title: 'Search',
+            //   context: context,
+            // ),
+            // placeholder,
+            // buildTabItem(
+            //   index: 2,
+            //   icon: Icon(Iconsax.heart),
+            //   title: 'Favorite',
+            //   context: context,
+            // ),
             buildTabItem(
               index: 3,
               icon: Icon(Iconsax.user),

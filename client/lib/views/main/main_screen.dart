@@ -7,9 +7,9 @@ import 'package:client/controllers/welcome_controller.dart';
 import 'package:client/themes/app_colors.dart';
 import 'package:client/utils/size_config.dart';
 import 'package:client/views/main/discover_page.dart';
-import 'package:client/views/main/favorite_page.dart';
+// import 'package:client/views/main/favorite_page.dart';
 import 'package:client/views/main/profile_page.dart';
-import 'package:client/views/main/search_page.dart';
+// import 'package:client/views/main/search_page.dart';
 import 'package:client/views/welcome/welcome_page.dart';
 import 'package:client/widgets/bottom_bar.dart';
 import 'package:client/widgets/custom_glassmorphic_container.dart';
@@ -22,8 +22,6 @@ class MainScreen extends GetView<MainScreenController> {
 
   final pages = <Widget>[
     DiscoverPage(),
-    SearchPage(),
-    FavouritePage(),
     ProfilePage(),
     // ProfilePage(user: Get.arguments),
   ];
@@ -36,7 +34,7 @@ class MainScreen extends GetView<MainScreenController> {
               WalletController.to.publicAdr != '')
           ? Scaffold(
               extendBody: true,
-              backgroundColor: Colors.transparent,
+              backgroundColor: Color.fromARGB(0, 220, 19, 19),
               body: Stack(
                 children: [
                   pages[controller.tabIndex],
@@ -54,26 +52,26 @@ class MainScreen extends GetView<MainScreenController> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                PrimaryButton(
-                                    buttonText: "Select from files",
-                                    width: SizeConfig.safeHorizontal! * 0.8,
-                                    height: SizeConfig.safeVertical! * 0.06,
-                                    buttonColor: AppColors.black,
-                                    onPressed: () async {
-                                      NFTController.to.pickImage();
-                                    }),
-                                PrimaryButton(
-                                  buttonText: "Capture Now",
-                                  width: SizeConfig.safeHorizontal! * 0.8,
-                                  height: SizeConfig.safeVertical! * 0.06,
-                                  onPressed: () async {
-                                    await availableCameras().then((cameras) {
-                                      Get.toNamed("/camera-screen");
-                                    });
-                                  },
-                                ),
-                              ],
+                              // children: [
+                              //   PrimaryButton(
+                              //       buttonText: "Select from files",
+                              //       width: SizeConfig.safeHorizontal! * 0.8,
+                              //       height: SizeConfig.safeVertical! * 0.06,
+                              //       buttonColor: AppColors.black,
+                              //       onPressed: () async {
+                              //         NFTController.to.pickImage();
+                              //       }),
+                              //   PrimaryButton(
+                              //     buttonText: "Capture Now",
+                              //     width: SizeConfig.safeHorizontal! * 0.8,
+                              //     height: SizeConfig.safeVertical! * 0.06,
+                              //     onPressed: () async {
+                              //       await availableCameras().then((cameras) {
+                              //         Get.toNamed("/camera-screen");
+                              //       });
+                              //     },
+                              //   ),
+                              // ],
                             ),
                           ),
                         ),
@@ -86,32 +84,32 @@ class MainScreen extends GetView<MainScreenController> {
                 index: controller.tabIndex,
                 onChangedTab: controller.changeTabIndex,
               ),
-              floatingActionButton: FloatingActionButton(
-                backgroundColor: AppColors.black,
-                shape: const StadiumBorder(
-                  side: BorderSide(color: Colors.white, width: 1),
-                ),
-                onPressed: () {},
-                child: AnimateIcons(
-                  startIcon: Icons.add,
-                  endIcon: Icons.close,
-                  controller: AnimateIconController(),
-                  startTooltip: 'Icons.add_circle',
-                  endTooltip: 'Icons.add_circle_outline',
-                  onStartIconPress: () {
-                    controller.openModal = !controller.openModal;
-                    return true;
-                  },
-                  onEndIconPress: () {
-                    controller.openModal = !controller.openModal;
-                    return true;
-                  },
-                  duration: const Duration(milliseconds: 500),
-                  startIconColor: AppColors.white,
-                  endIconColor: AppColors.white,
-                  clockwise: false,
-                ),
-              ),
+              // floatingActionButton: FloatingActionButton(
+              //   backgroundColor: AppColors.black,
+              //   shape: const StadiumBorder(
+              //     side: BorderSide(color: Colors.white, width: 1),
+              //   ),
+              //   onPressed: () {},
+              //   child: AnimateIcons(
+              //     startIcon: Icons.add,
+              //     endIcon: Icons.close,
+              //     controller: AnimateIconController(),
+              //     startTooltip: 'Icons.add_circle',
+              //     endTooltip: 'Icons.add_circle_outline',
+              //     onStartIconPress: () {
+              //       controller.openModal = !controller.openModal;
+              //       return true;
+              //     },
+              //     onEndIconPress: () {
+              //       controller.openModal = !controller.openModal;
+              //       return true;
+              //     },
+              //     duration: const Duration(milliseconds: 500),
+              //     startIconColor: AppColors.white,
+              //     endIconColor: AppColors.white,
+              //     clockwise: false,
+              //   ),
+              // ),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerDocked,
             )

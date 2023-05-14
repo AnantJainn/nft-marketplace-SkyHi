@@ -44,7 +44,7 @@ class WelcomePage extends GetView<WelcomeController> {
                         child: Text(
                           AppStrings.subtitle,
                           style: AppTextStyles.h3().copyWith(
-                            fontSize: 29.0,
+                            fontSize: 27.0,
                             fontFamily: AppTextStyles.gilroyBold,
                             foreground: Paint()
                               ..shader = AppColors.purpleGradient,
