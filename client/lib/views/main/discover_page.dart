@@ -360,6 +360,13 @@ import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:http/http.dart';
+import 'package:web3dart/web3dart.dart';
+import 'package:web_socket_channel/io.dart';
+import 'dart:convert';
+import 'package:client/views/main/profile_page.dart';
+import 'package:client/views/main/global.dart';
+
 
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({Key? key}) : super(key: key);
@@ -369,6 +376,473 @@ class DiscoverPage extends StatefulWidget {
 }
 
 class DiscoverPageState extends State<DiscoverPage> {
+  static const String _yourContractAbi = '''[
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "approved",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "approved",
+				"type": "bool"
+			}
+		],
+		"name": "ApprovalForAll",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "recipient",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "tokenURI",
+				"type": "string"
+			}
+		],
+		"name": "mintNFT",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "safeTransferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes",
+				"name": "data",
+				"type": "bytes"
+			}
+		],
+		"name": "safeTransferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "approved",
+				"type": "bool"
+			}
+		],
+		"name": "setApprovalForAll",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "getApproved",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			}
+		],
+		"name": "isApprovedForAll",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ownerOf",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes4",
+				"name": "interfaceId",
+				"type": "bytes4"
+			}
+		],
+		"name": "supportsInterface",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "tokenURI",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+''';
+  final client = Web3Client(
+    'https://eth-goerli.g.alchemy.com/v2/__Qu_EtvGn0g8jtrjsp4RsWiOy0SA-Gq',
+    Client(),
+    socketConnector: () {
+      return IOWebSocketChannel.connect(
+              'wss://eth-goerli.g.alchemy.com/v2/__Qu_EtvGn0g8jtrjsp4RsWiOy0SA-Gq')
+          .cast<String>();
+    },
+  );
+
+  // void _mintNFT() async {
+  //   final contract = DeployedContract(
+  //     ContractAbi.fromJson(jsonEncode(_yourContractAbi), '4_Create-NFT'),
+  //     EthereumAddress.fromHex('0xaa775dFd91D7694a5cC8b41CBB12078b20b20E9E'),
+  //   );
+
+  //   final function = contract.function('mintNFT');
+
+  //   // Replace ['Function Parameters'] with actual parameters
+  //   final response = await client.call(
+  //     sender:
+  //         EthereumAddress.fromHex('0x0A2222B3BC8827573322040a6347aF5aB828Cb4F'),
+  //     contract: contract,
+  //     function: function,
+  //     params: ['0x0A2222B3BC8827573322040a6347aF5aB828Cb4F'],
+  //   );
+  // }
+
+  String recipientAddress =
+      '0x0A2222B3BC8827573322040a6347aF5aB828Cb4F'; // Replace with your recipient address
+  String tokenURI =
+      'https://gateway.pinata.cloud/ipfs/QmQ2mkZw5c2Cstp4NboT4moaNrCiYFoXF9bB8e43gQiFoN?_gl=1*1n0c8n8*rs_ga*MTM2OTkwMjQ5Ny4xNjg0MTY2NzYx*rs_ga_5RMPXG14TE*MTY4NDE2Njc2MS4xLjEuMTY4NDE2NjgwMC4yMS4wLjA.';
+
+  void _mintNFT(String recipient, String tokenURI) async {
+    final contract = DeployedContract(
+      ContractAbi.fromJson(jsonEncode(_yourContractAbi), '4_Create-NFT'),
+      EthereumAddress.fromHex('0x38d6C22EfdB6213C9a5e03634d665a07369a8c98'),
+    );
+
+    final function = contract.function('mintNFT');
+
+    final response = await client.call(
+      sender:
+          EthereumAddress.fromHex('0x0A2222B3BC8827573322040a6347aF5aB828Cb4F'),
+      contract: contract,
+      function: function,
+      params: [
+        '0x0A2222B3BC8827573322040a6347aF5aB828Cb4F',
+        'https://gateway.pinata.cloud/ipfs/QmQ2mkZw5c2Cstp4NboT4moaNrCiYFoXF9bB8e43gQiFoN?_gl=1*1n0c8n8*rs_ga*MTM2OTkwMjQ5Ny4xNjg0MTY2NzYx*rs_ga_5RMPXG14TE*MTY4NDE2Njc2MS4xLjEuMTY4NDE2NjgwMC4yMS4wLjA.'
+      ],
+    );
+  }
+
   //  MapType _currentMapType = MapType.normal;
   String? _darkMapStyle;
   MapType _currentMapType = MapType.normal;
@@ -430,11 +904,11 @@ class DiscoverPageState extends State<DiscoverPage> {
   ];
 
   final List<String> _markerImages = [
-    'https://lh3.googleusercontent.com/ogw/AOLn63GZfPJELQcFQp8XxQWKFIwSwPLPbNTkrTdcab8zG7k=s64-c-mo',
-    'https://lh3.googleusercontent.com/ogw/AOLn63GZfPJELQcFQp8XxQWKFIwSwPLPbNTkrTdcab8zG7k=s64-c-mo',
-    'https://lh3.googleusercontent.com/ogw/AOLn63GZfPJELQcFQp8XxQWKFIwSwPLPbNTkrTdcab8zG7k=s64-c-mo',
-    'https://lh3.googleusercontent.com/ogw/AOLn63GZfPJELQcFQp8XxQWKFIwSwPLPbNTkrTdcab8zG7k=s64-c-mo',
-    'https://lh3.googleusercontent.com/ogw/AOLn63GZfPJELQcFQp8XxQWKFIwSwPLPbNTkrTdcab8zG7k=s64-c-mo',
+    'https://gateway.pinata.cloud/ipfs/QmQ2mkZw5c2Cstp4NboT4moaNrCiYFoXF9bB8e43gQiFoN?_gl=1*1n0c8n8*rs_ga*MTM2OTkwMjQ5Ny4xNjg0MTY2NzYx*rs_ga_5RMPXG14TE*MTY4NDE2Njc2MS4xLjEuMTY4NDE2NjgwMC4yMS4wLjA.',
+    'https://gateway.pinata.cloud/ipfs/QmWr2rCWaeDTGJuxDj4RqdxQ3agQbomX2pcqcQ95JQD59r?_gl=1*189c93v*rs_ga*MTM2OTkwMjQ5Ny4xNjg0MTY2NzYx*rs_ga_5RMPXG14TE*MTY4NDMzNzU1Ni4zLjEuMTY4NDMzNzc5Ny41OC4wLjA.',
+    'https://gateway.pinata.cloud/ipfs/QmQ2mkZw5c2Cstp4NboT4moaNrCiYFoXF9bB8e43gQiFoN?_gl=1*1n0c8n8*rs_ga*MTM2OTkwMjQ5Ny4xNjg0MTY2NzYx*rs_ga_5RMPXG14TE*MTY4NDE2Njc2MS4xLjEuMTY4NDE2NjgwMC4yMS4wLjA.',
+    'https://gateway.pinata.cloud/ipfs/QmQ2mkZw5c2Cstp4NboT4moaNrCiYFoXF9bB8e43gQiFoN?_gl=1*1n0c8n8*rs_ga*MTM2OTkwMjQ5Ny4xNjg0MTY2NzYx*rs_ga_5RMPXG14TE*MTY4NDE2Njc2MS4xLjEuMTY4NDE2NjgwMC4yMS4wLjA.',
+    'https://gateway.pinata.cloud/ipfs/QmQ2mkZw5c2Cstp4NboT4moaNrCiYFoXF9bB8e43gQiFoN?_gl=1*1n0c8n8*rs_ga*MTM2OTkwMjQ5Ny4xNjg0MTY2NzYx*rs_ga_5RMPXG14TE*MTY4NDE2Njc2MS4xLjEuMTY4NDE2NjgwMC4yMS4wLjA.',
   ];
 
   final List<Marker> _markers = [];
@@ -485,6 +959,10 @@ class DiscoverPageState extends State<DiscoverPage> {
     }
   }
 
+  // global.dart
+
+  // List<String> purchasedNFTs = [];
+
   void _onInfoWindowTap(int index) {
     showModalBottomSheet(
       context: context,
@@ -504,7 +982,19 @@ class DiscoverPageState extends State<DiscoverPage> {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  _mintNFT("0x0A2222B3BC8827573322040a6347aF5aB828Cb4F",
+                      "https://gateway.pinata.cloud/ipfs/QmQ2mkZw5c2Cstp4NboT4moaNrCiYFoXF9bB8e43gQiFoN?_gl=1*1n0c8n8*rs_ga*MTM2OTkwMjQ5Ny4xNjg0MTY2NzYx*rs_ga_5RMPXG14TE*MTY4NDE2Njc2MS4xLjEuMTY4NDE2NjgwMC4yMS4wLjA.");
+                  purchasedNFTs.add(_markerImages[
+                      index]); // Add the URL to the purchasedNFTs list
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfilePage(
+                            key: const Key("profile_page_key"),
+                            imageUrl: _markerImages[index])),
+                  );
+                },
                 child: const Text('Buy it'),
               ),
             ],
@@ -513,6 +1003,7 @@ class DiscoverPageState extends State<DiscoverPage> {
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

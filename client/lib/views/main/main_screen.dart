@@ -19,12 +19,21 @@ import 'package:get/get.dart';
 
 class MainScreen extends GetView<MainScreenController> {
   MainScreen({Key? key}) : super(key: key);
+  // String selectedImageUrl = '';
+
 
   final pages = <Widget>[
     DiscoverPage(),
-    ProfilePage(),
+    if (selectedImageUrl != null) ProfilePage(imageUrl: selectedImageUrl),
+    // ProfilePage(imageUrl: '',),
+    ProfilePage(
+        imageUrl:
+            ''), // Provide a valid URL
+
     // ProfilePage(user: Get.arguments),
   ];
+  
+  static get selectedImageUrl => null;
 
   @override
   Widget build(BuildContext context) {

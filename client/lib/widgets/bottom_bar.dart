@@ -56,7 +56,7 @@ class BottomBar extends GetView<MainScreenController> {
             //   context: context,
             // ),
             buildTabItem(
-              index: 3,
+              index: 1,
               icon: Icon(Iconsax.user),
               title: 'Profile',
               context: context,
