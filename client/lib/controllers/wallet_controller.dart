@@ -5,8 +5,30 @@ import 'package:client/utils/services/wallet_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web3dart/web3dart.dart';
+import 'package:web3dart/crypto.dart'; // needed for the PRIVATE_KEY_TO_PUBLIC_HEX constant
+import 'package:bip32/bip32.dart' as bip32;
+import 'package:bip39/bip39.dart' as bip39;
+import 'package:convert/convert.dart'; // for hex converter
+
 
 class WalletController extends GetxController with StateMixin {
+  Future<void> connect(String mnemonic) async {
+    // You may want to add more validation here, like checking if the mnemonic is valid.
+    if (mnemonic.isEmpty) {
+      throw Exception('Mnemonic must not be empty');
+    }
+
+    // Use the provided mnemonic to create credentials.
+    final seed = bip39.mnemonicToSeed(mnemonic);
+    final root = bip32.BIP32.fromSeed(seed);
+    final child = root.derivePath("m/44'/60'/0'/0/0"); // path for Ethereum wallets
+
+    cred = EthPrivateKey.fromHex(hex.encode(child.privateKey!)); // convert Uint8List to Hex
+    address = await cred.extractAddress();
+
+    setBalance(address);
+    publicAdr = address.hex;
+  }
   static WalletController get to => Get.find();
 
   final WalletService _walletService = WalletService();

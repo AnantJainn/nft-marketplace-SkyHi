@@ -31,7 +31,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+    
   # state management & storage
+  shared_preferences: ^2.0.9
   get: ^4.6.5
   get_storage: ^2.0.3
   web_socket_channel: ^2.1.0
@@ -74,6 +76,8 @@ dependencies:
   permission_handler: ^10.0.0
   image_picker: ^0.8.5+3
   truncate: ^3.0.1
+  bip39: ^1.0.6
+  bip32: ^2.0.0
 
 flutter_icons:
   image_path_ios: 'assets/images/icon.png'
