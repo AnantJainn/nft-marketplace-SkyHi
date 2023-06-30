@@ -27,6 +27,7 @@ class DiscoverPageState extends State<DiscoverPage> {
     const LatLng(28.6813125, 77.3135887),
     const LatLng(28.6813127, 77.3135887),
     const LatLng(28.6813129, 77.3135887),
+    const LatLng(28.6813131, 77.3135887),
   ];
 
   final List<String> _markerImages = [
@@ -103,28 +104,7 @@ class DiscoverPageState extends State<DiscoverPage> {
     });
   }
 
-  Future<void> _getCurrentLocation() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
-      debugPrint("Permission not granted");
-      return;
-    }
-
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.best,
-    );
-
-    setState(() {
-      _currentPosition = position;
-      _isInRange = _checkRange();
-    });
-
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(
-      CameraUpdate.newLatLng(LatLng(position.latitude, position.longitude)),
-    );
-  }
+  
 
   // bool _checkRange() {
   //   for (LatLng position in _markerPositions) {
@@ -151,11 +131,34 @@ class DiscoverPageState extends State<DiscoverPage> {
         position.longitude,
       );
 
-      if (distance <= 20) {
+      if (distance <= 25) {
         return true;
       }
     }
     return false;
+  }
+
+  Future<void> _getCurrentLocation() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      debugPrint("Permission not granted");
+      return;
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+    );
+
+    setState(() {
+      _currentPosition = position;
+      _isInRange = _checkRange();
+    });
+
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(
+      CameraUpdate.newLatLng(LatLng(position.latitude, position.longitude)),
+    );
   }
 
   void _calculateMarkerPositions() {
@@ -210,48 +213,104 @@ class DiscoverPageState extends State<DiscoverPage> {
   //   );
   // }
 
+  // void _onInfoWindowTap(int index) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text('Enlarge Image'),
+  //         content: Image.network(
+  //           _markerImages[index],
+  //           errorBuilder: (context, error, stackTrace) {
+  //             return const Text('Image not found');
+  //           },
+  //         ),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () {
+  //               Navigator.pop(context);
+  //             },
+  //             child: const Text('Close'),
+  //           ),
+  //           if (_isInRange)
+  //             TextButton(
+  //               onPressed: () {
+  //                 Navigator.pop(context);
+  //                 setState(() {
+  //                   _isInRange = _checkRange();
+  //                 });
+  //                 _launchURL(_markerUrls[index]);
+
+  //                 // Handle purchasing logic here
+  //               },
+  //               child: const Text('Buy'),
+  //             ),
+  //           // TextButton(
+  //           //   onPressed: () {
+  //           //     _launchURL(_markerUrls[index]);
+  //           //   },
+  //           //   child: const Text('Buy'),
+  //           // ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+
   void _onInfoWindowTap(int index) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Enlarge Image'),
-          content: Image.network(
-            _markerImages[index],
-            errorBuilder: (context, error, stackTrace) {
-              return const Text('Image not found');
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
+    if (_isInRange) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Enlarge Image'),
+            content: Image.network(
+              _markerImages[index],
+              errorBuilder: (context, error, stackTrace) {
+                return const Text('Image not found');
               },
-              child: const Text('Close'),
             ),
-            if (_isInRange)
+            actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
+                },
+                child: const Text('Close'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  // Handle purchasing logic here
                   setState(() {
-                    _isInRange = _checkRange();
+                    _purchasedImages.add(_markerImages[index]);
                   });
                   _launchURL(_markerUrls[index]);
-
-                  // Handle purchasing logic here
                 },
                 child: const Text('Buy'),
               ),
-            // TextButton(
-            //   onPressed: () {
-            //     _launchURL(_markerUrls[index]);
-            //   },
-            //   child: const Text('Buy'),
-            // ),
-          ],
-        );
-      },
-    );
+            ],
+          );
+        },
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Out of Range'),
+            content: const Text('You are not in range to purchase this image.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Close'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   // Method to launch the URL
