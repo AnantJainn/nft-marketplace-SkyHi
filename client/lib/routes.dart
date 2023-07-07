@@ -14,7 +14,7 @@ class AppRoutes {
   static final routes = [
     GetPage(
         name: '/',
-        page: () => const WelcomePage(),
+        page: () => const DiscoverPage(),
         transition: Transition.fadeIn,
         transitionDuration: const Duration(milliseconds: 500)),
     GetPage(
@@ -29,7 +29,7 @@ class AppRoutes {
         transitionDuration: const Duration(milliseconds: 500)),
     GetPage(
         name: '/main-screen',
-        page: () => MainScreen(),
+        page: () => DiscoverPage(),
         transition: Transition.fadeIn,
         transitionDuration: const Duration(milliseconds: 500)),
     GetPage(

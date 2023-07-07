@@ -24,11 +24,11 @@ class MainScreen extends GetView<MainScreenController> {
 
   final pages = <Widget>[
     DiscoverPage(),
-    if (selectedImageUrl != null) ProfilePage(imageUrl: selectedImageUrl),
-    // ProfilePage(imageUrl: '',),
-    ProfilePage(
-        imageUrl:
-            ''), // Provide a valid URL
+    // if (selectedImageUrl != null) ProfilePage(imageUrl: selectedImageUrl),
+    // // ProfilePage(imageUrl: '',),
+    // ProfilePage(
+    //     imageUrl:
+    //         ''), // Provide a valid URL
 
     // ProfilePage(user: Get.arguments),
   ];
