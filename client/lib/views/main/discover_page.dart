@@ -204,7 +204,7 @@ class DiscoverPageState extends State<DiscoverPage> {
             icon: BitmapDescriptor.fromBytes(markerIcon),
             infoWindow: InfoWindow(
               title: 'Image $i',
-              snippet: 'Click here to enlarge',
+              snippet: 'Click here to enlarge NFT',
               onTap: () => _onInfoWindowTap(i),
             ),
           ),
